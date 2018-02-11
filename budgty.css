@@ -1,0 +1,45 @@
+body {
+  background-color: yellow;
+}
+.main {
+  background-color: grey;
+  display: grid;
+  grid-template-columns:60%;
+  min-height: 800px;
+  grid-template-rows:4fr 1fr 6fr;
+  justify-content: center;
+  
+
+
+  
+  border:1px solid black;
+}
+
+
+.budget-statics {
+  background-color: red;
+  grid-row:1 / 2;
+}
+.input-area {
+  background-color: beige;
+  grid-row:2 / 3;
+  padding:;
+
+}
+.entries {
+  background-color: blue;
+  grid-row:3 /4;
+}
+
+.description {
+  width:150px;
+
+}
+.value {
+     width:50px;
+}
+.vertical-align {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
