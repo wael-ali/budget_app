@@ -1,10 +1,12 @@
 body {
-  background-color: yellow;
+  background-color: beige;
+  font-family: 'Fira Sans Condensed', sans-serif;
+  margin: 0;
 }
 .main {
-  background-color: grey;
+  background-color:;
   display: grid;
-  grid-template-columns:60%;
+  grid-template-columns:100%;
   min-height: 800px;
   grid-template-rows:4fr 1fr 6fr;
   justify-content: center;
@@ -12,22 +14,25 @@ body {
 
 
   
-  border:1px solid black;
+  border-bottom:1px solid black;
 }
 
 
 .budget-statics {
-  background-color: red;
+  background-color: ;
   grid-row:1 / 2;
+  background-image: url(http://albumarium.com/media/W1siZiIsIjUyZmE5MWZhNzY3MDczNzFlNjAwMDAwMCJdXQ?sha=8145f073);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .input-area {
-  background-color: beige;
+  background-color:;
   grid-row:2 / 3;
   padding:;
 
 }
 .entries {
-  background-color: blue;
+  background-color:#3c3d3f;
   grid-row:3 /4;
 }
 
@@ -42,4 +47,45 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.entries-grid {
+  background-color: ;
+  display: grid;
+  min-width:90%;
+  grid-template-columns:50% 50%; 
+  grid-column-gap:5px;
+  justify-content: center;
+}
+.left {
+  grid-column:1 / 2;
+
+}
+
+.right {
+  grid-column:2 / 3;
+}
+.entry {
+border-bottom: 1px solid grey;
+padding: 10px;
+width: 80%;
+}
+.top {
+  color: white;
+  font-size: 22px;
+  padding: 16px;
+  min-width: 20%;
+  background-color: rgba(249, 249, 247, 0.1);
+}
+
+.income {
+  background-color: rgba(129, 244, 75, 0.8);
+  margin: 10px 0; 
+  padding: 8px;
+}
+
+.expenses{
+  background-color: rgba(216, 82, 82, 0.8);
+  margin-bottom: 7px;
+  padding: 8px;
 }
