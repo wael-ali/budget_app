@@ -12,11 +12,27 @@ var budgetController = (function(){
 
 // UI CONTROLLER
 var UIController = (function(){
+  // get all the DOM selectors we need
+ var DOMstrings = {
+  inputType: '.entry-type',
+  inputDescription: '.add-description',
+  inputValue: '.add-value',
+  inputbtn: ".add-btn",
+ }
 
 
-
-
-  // public area
+  return {
+    getinput: function(){
+      return {
+       type: document.querySelector(DOMstrings.inputType).value, // either inc or exp
+       description: document.querySelector(DOMstrings.inputDescription).value,
+       value: document.querySelector(DOMstrings.inputValue).value,
+      }
+    },
+    getDOMstrings: function(){
+      return DOMstrings;
+    },
+  };
 
 })();
 
@@ -30,12 +46,14 @@ var UIController = (function(){
 // Module three => the main area => it connects othr controllers
 // GLOBAL APP CONTROLLER
 
-var controller = (function(budgetCtrl, UICtrlr){
+var controller = (function(budgetCtrl, UICtrl){
+  var DOM = UICtrl.getDOMstrings();
 
   var ctrlAddItem = function(){
       console.log('It works!');
       // get the field input 
-
+      var input = UICtrl.getinput();
+      console.log(input);
       // add the item to the budget controller
 
       // add the item to the UI
@@ -47,7 +65,7 @@ var controller = (function(budgetCtrl, UICtrlr){
      
   };
 
-  document.querySelector(".add-btn").addEventListener('click', function(){
+  document.querySelector(DOM.inputbtn).addEventListener('click', function(){
     ctrlAddItem();
   });
 
