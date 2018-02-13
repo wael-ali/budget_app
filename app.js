@@ -32,7 +32,6 @@ var data = {
 
 
 
-a
 // UI CONTROLLER
 var UIController = (function(){
   // get all the DOM selectors we need
@@ -80,6 +79,7 @@ var controller = (function(budgetCtrl, UICtrl){
 
     document.addEventListener('keypress', function(event){
       if (event.keyCode === 13 || event.which === 13) {
+        event.preventDefault(); // prventing the enter key from also triggering a click event.
         ctrlAddItem();
       }
     });
