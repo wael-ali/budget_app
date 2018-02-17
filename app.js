@@ -270,8 +270,17 @@ var controller = (function(budgetCtrl, UICtrl){
     init: function(){
       setupEventListeners();
     },
+    setDOM: function(){
+      UICtrl.displayBudget({
+            budget: 0,
+            totalInc: 0,
+            totalExp: 0,
+            percentage: 0,
+          });
+    },
   }
 })(budgetController, UIController);
 
 // #*#--------------------------------#*#--------------------------------#*#
 controller.init();
+controller.setDOM();
