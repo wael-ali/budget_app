@@ -115,12 +115,20 @@ var budgetController = (function(){
 var UIController = (function(){
   // get all the DOM selectors we need
  var DOMstrings = {
-  inputType:        '.entry-type',
-  inputDescription: '.add-description',
-  inputValue:       '.add-value',
-  inputbtn:         ".add-btn",
-  income_list:      '.income_list',
-  expenses_list:    '.expenses_list'
+  inputType:          '.entry-type',
+  inputDescription:   '.add-description',
+
+  inputValue:         '.add-value',
+  inputbtn:           ".add-btn",
+
+  income_list:        '.income_list',
+  expenses_list:      '.expenses_list',
+
+  total_income:       '.total-income',
+  budget:             '.budget',
+
+  total_expenses:     '.total_expenses',
+  exp_perc:           '#exp_perc'
  }
 
 
@@ -132,9 +140,11 @@ var UIController = (function(){
        value:         parseFloat(document.querySelector(DOMstrings.inputValue).value)
       }
     },
+
     getDOMstrings: function(){
       return DOMstrings;
     },
+
     UICtrlAddItemTOList: function(obj, type){
       var html, newHtml, expId, incId, element;
       expId = 'expense-'+obj.id;
@@ -144,6 +154,7 @@ var UIController = (function(){
       // replace the placeholder text with actual data
       if (type === 'inc') {
         newHtml = html.replace('%expense-id%', incId);
+        newHtml = newHtml.replace('<span class="percentage">20%</span>','');
         element = DOMstrings.income_list;
       }else if (type === 'exp') {
         newHtml = html.replace('%expense-id%', expId);
@@ -155,6 +166,7 @@ var UIController = (function(){
       // Insert the HTML into the DOM.
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
     },
+
     clearFields: function(){
       var fields, fieldsArr;
 
@@ -165,9 +177,21 @@ var UIController = (function(){
         current.value = "";
       });
       fields[0].focus();
+    },
 
-    }
+    displayBudget: function(obj){
+      document.querySelector(DOMstrings.budget).textContent                     = obj.budget;
+      document.querySelector(DOMstrings.total_income).textContent               = obj.totalInc;
+      document.querySelector(DOMstrings.total_expenses).textContent             = obj.totalExp;
+      if (obj.percentage > 0) {
+        document.querySelector(DOMstrings.exp_perc).textContent  = obj.percentage + '%';
+      }else{
+        document.querySelector(DOMstrings.exp_perc).textContent  = '-1';
+      }
+      
+    },
   };
+
 
 })();
 
@@ -210,7 +234,7 @@ var controller = (function(budgetCtrl, UICtrl){
     var budget = budgetCtrl.getBudget();
 
     // display the budget on the UI 
-    console.log(budget);
+    UICtrl.displayBudget(budget);
   }
 
 

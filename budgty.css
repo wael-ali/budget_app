@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand');
 body {
   background-color: beige;
-  font-family: 'Fira Sans Condensed', sans-serif;
+  /*font-family: 'Fira Sans Condensed', sans-serif;*/
+   font-family: 'Quicksand', sans-serif;
   margin: 0;
 }
 .main {
@@ -14,10 +16,21 @@ body {
 
 
   
-  border-bottom:1px solid black;
+  border-bottom:1px solid white;
 }
 
 
+
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* -------------------the top part*/
 .budget-statics {
   background-color: ;
   grid-row:1 / 2;
@@ -25,37 +38,101 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+.top {
+  color: white;
+  padding: 16px;
+  min-width: 20%;
+  background-color: rgba(249, 249, 247, 0.1);
+}
+.top h3 {
+  font-size: 22px;
+}
+
+.budget {
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  font-family: 'Quicksand', sans-serif;
+
+}
+
+.income {
+  background-color: rgba(13, 114, 18, 0.7);
+  margin: 10px 0; 
+  padding: 8px;
+  height: 25px;
+}
+.income .right {
+  color: white;
+  padding: 5px; 
+  margin-right: 30px;
+
+  }
+
+.expenses{
+  background-color: rgba(216, 82, 82, 0.8);
+  margin-bottom: 7px;
+  padding: 8px;
+  
+  grid-template-columns:repeat(1fr, 6);
+}
+.expenses .right {
+  color: white;
+  background-color: rgba(216, 82, 82, 0.8);
+}
+.expenses .percentage {
+ 
+  background-color: rgba(249, 249, 247, 0.2);
+}
+.right {
+  float: right;
+
+}
+.left {
+  float: left;
+}
+/* -------------------the input area*/
 .input-area {
   background-color:;
   grid-row:2 / 3;
-  padding:;
+  padding:10px;
 
 }
-.entries {
-  background-color:rgba(192, 196, 216, 0.5);
+.add-btn, .add-description, .add-value, .entry-type {
   
-}
-.add {
-  margin: 10px 0;
+  border: 1px solid green;
+  border-radius: 5px;
+  background-color:white;
+  padding: 8px;
+  margin-right: 11px;
+
+
 }
 
-.description {
+.add-btn {
+  border-radius: 50%;
+ 
+}
+
+.add-description {
   width:150px;
-
 }
-.value {
+.add-value {
   width:50px;
 }
 .entry-type {
-  width: 20px;
-  height: 30px;
-}
-.vertical-align {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 45px;
+
+  background: url(up-down1.png) white;
+  background-repeat: no-repeat;
+  background-size: 40%;
+  background-position: right center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
+
+/* -------------------the list area*/
 .entries-grid {
   grid-row:3 /4;
   background-color:rgba(192, 196, 216, 0.5);
@@ -78,7 +155,7 @@ body {
   padding: 10px;
 }
 .entry {
-border-bottom: 1px solid grey;
+border-bottom: 1px solid white;
 padding: 20px;
 width: 80%;
 height: 15px;
@@ -87,49 +164,37 @@ height: 15px;
 .entry:hover {
   background-color: rgba(237, 161, 9, 0.1)
 }
-
-
-.top {
-  color: white;
-  font-size: 22px;
-  padding: 16px;
-  min-width: 20%;
-  background-color: rgba(249, 249, 247, 0.1);
-}
-
-.income {
-  background-color: rgba(13, 114, 18, 0.7);
-  margin: 10px 0; 
-  padding: 8px;
-}
-
-.expenses{
-  background-color: rgba(216, 82, 82, 0.8);
-  margin-bottom: 7px;
-  padding: 8px;
-}
-.right {
-  float: right;
-
-}
-.left {
-  float: left;
-}
 .dellete-btn {
-  border:1px solid red;
   color: red;
-  border-radius: 100%;
+  border-radius: 50%;
   width: 25px;
   height: 25px;
-  box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3);
-  background: transparent;
   margin-left: 15px;
 }
-.income_list h2, .right {color:rgba(13, 114, 18, 0.5);}
-.expenses_list .right, h2 {color: rgba(216, 82, 82, 0.8);}
-.dellete-btn {display: none;}
-#value-id:hover .dellete-btn {display: inline;}
-.percentage {
-  margin-left: 10px;
-
+.income_list .right {color:rgba(13, 114, 18, 0.5);}
+.income_list h2 {color:rgba(13, 114, 18, 0.5);}
+.income_list .dellete-btn {
+  border:1px solid rgba(13, 114, 18, 0.7);
+  color: rgba(13, 114, 18, 0.5);
 }
+.expenses_list .right, h2 {color: rgba(216, 82, 82, 0.8);}
+.expenses_list .right, h2 {color: rgba(216, 82, 82, 0.8);}
+.expenses_list .dellete-btn {
+    border:0.1px solid red;
+}
+
+.dellete-btn {
+  display: none;
+}
+
+.entry:hover .dellete-btn {
+  display: inline;
+}
+
+.percentage {
+  background-color: rgba(216, 82, 82, 0.5);
+  margin-left: 10px;
+  border-radius: 20%;
+  padding: 3px;
+}
+
