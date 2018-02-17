@@ -14,52 +14,94 @@ var budgetController = (function(){
     this.value        = value;
   }
 
-var data = {
-  allItems: {
-    exp: [],
-    inc: []
-  },
-  totals: {
-    exp: 0,
-    inc: 0
-  }
-}
-
-var createId = function(arr){
-  // if not empty we need the last id + 1
-  if(arr.length > 0){
-    return arr[arr.length-1].id + 1;;
-  }else{
-    return 0;
-  }
-}
-
-
-
-
-
-
-
-return {
-  BudgetCtrlAddItem: function(input){
-    var newItem, id;
-      // creating the item object deppinding on its type
-    if (input.type === 'inc') {
-      id = createId(data.allItems.inc);
-      newItem = new Income(id, input.description, input.value);
-    }else if (input.type === 'exp'){
-      id = createId(data.allItems.exp);
-      newItem = new Expense(id, input.description, input.value);
+  // =================
+  // private functions
+  // ========================================= 
+  var createId = function(arr){
+    // if not empty we need the last id + 1
+    if(arr.length > 0){
+      return arr[arr.length-1].id + 1;;
+    }else{
+      return 0;
     }
-    // adding the item to the our data object
-    data.allItems[input.type].push(newItem);
-    // return the new item
-    return newItem;
-  },
-  testing: function(){
-    console.log(data);
   }
-}
+
+
+  var calculateTotal = function(type){
+    var sum = 0;
+    data.allItems[type].forEach(function(currentElement){
+      sum += currentElement.value;
+    });
+    data.totals[type] = sum;
+  };
+
+  // Private objects !....
+  var data = {
+    allItems: {
+      exp: [],
+      inc: []
+    },
+    totals: {
+      exp: 0,
+      inc: 0
+    },
+    budget: 0,
+    percentage: -1,
+  }
+
+
+
+  // ================
+  // public functions 
+  // =========================================
+  return {
+    BudgetCtrlAddItem: function(input){
+      var newItem, id;
+
+        // creating the item object deppinding on its type
+      if (input.type === 'inc') {
+        id = createId(data.allItems.inc);
+        newItem = new Income(id, input.description, input.value);
+      }else if (input.type === 'exp'){
+        id = createId(data.allItems.exp);
+        newItem = new Expense(id, input.description, input.value);
+      }
+
+      // adding the item to the our data object
+      data.allItems[input.type].push(newItem);
+
+      // return the new item
+      return newItem;
+    },
+    calculateBudget: function(){
+
+      // calculate total income and expenses
+      calculateTotal('inc');
+      calculateTotal('exp');
+
+      // calculat the budget: income - expenses
+      data.budget = data.totals.inc - data.totals.exp;
+
+      // calculate the percentage of income that we spent
+      if (data.totals.inc > 0) { // prevent infinity value through dividing by zero 
+        data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+      }else{
+        data.percentage = -1;
+      }
+      
+    },
+    getBudget: function(){
+      return {
+        budget: data.budget,
+        totalInc: data.totals.inc,
+        totalExp: data.totals.exp,
+        percentage: data.percentage,
+      }
+    },
+    testing: function(){
+      console.log(data);
+    }
+  }
 
 
 })();
@@ -67,8 +109,9 @@ return {
 
 
 
-
-// UI CONTROLLER -----------------------------------------------------------------
+// ************************************************************
+// UI controller                *
+// ******************************
 var UIController = (function(){
   // get all the DOM selectors we need
  var DOMstrings = {
@@ -136,8 +179,9 @@ var UIController = (function(){
 
 
 // Module three => the main area => it connects othr controllers
-// GLOBAL APP CONTROLLER --------------------------------------------------------------------------
-
+// ************************************************************
+// GLOBAL APP CONTROLLER        *       
+// ******************************
 var controller = (function(budgetCtrl, UICtrl){
 
   var setupEventListeners = function(){
@@ -160,10 +204,13 @@ var controller = (function(budgetCtrl, UICtrl){
   var updateBudget = function(){
 
     // calculate the budget 
+    budgetCtrl.calculateBudget();
 
-
+    // retrn budget
+    var budget = budgetCtrl.getBudget();
 
     // display the budget on the UI 
+    console.log(budget);
   }
 
 
@@ -189,6 +236,12 @@ var controller = (function(budgetCtrl, UICtrl){
  
   };
 
+
+
+
+  // ================
+  // public functions 
+  // =========================================
   return {
     init: function(){
       setupEventListeners();
@@ -196,4 +249,5 @@ var controller = (function(budgetCtrl, UICtrl){
   }
 })(budgetController, UIController);
 
+// #*#--------------------------------#*#--------------------------------#*#
 controller.init();
