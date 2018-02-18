@@ -55,6 +55,7 @@ var budgetController = (function(){
   // public functions 
   // =========================================
   return {
+
     BudgetCtrlAddItem: function(input){
       var newItem, id;
 
@@ -73,6 +74,24 @@ var budgetController = (function(){
       // return the new item
       return newItem;
     },
+
+    budgetCtrlDelleteItem: function(type, id){
+      var ids, index;
+
+      // id = 6
+      // ids = [1,4,6,7,9] => we have to dellete the item which index is 2
+      // get ids array of all the items in data structure in a type(exp/inc)
+      ids = data.allItems[type].map(function(current_type_item){
+        return current_type_item.id;
+      });
+
+      // getting the index of the item that we gonna dellete
+      index = ids.indexOf(id); // retrurn -1 when it is not found
+      if (index !== -1) {         
+        data.allItems[type].splice(index, 1) // dellete array start at index contains one item after
+      }
+    },
+
     calculateBudget: function(){
 
       // calculate total income and expenses
@@ -277,8 +296,21 @@ var controller = (function(budgetCtrl, UICtrl){
 
   // Delleting Item methode
   var ctrlDelleteItem = function(event){
-    var itemId;
+    var itemId, type, ID;
     itemId = event.target.parentNode.parentNode.parentNode.id;
+
+    if (itemId) {
+      // inc-1
+      var arr = itemId.split('-');
+      type = arr[0],
+      ID = parseInt(arr[1]);
+
+      // dellete the item from the data structure (budgetcontroller function)
+      budgetCtrl.budgetCtrlDelleteItem(type, ID);
+      // dellete the item from the user interface
+
+      // update and show the budget 
+    }
   };
 
 
