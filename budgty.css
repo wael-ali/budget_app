@@ -133,7 +133,7 @@ body {
 
 
 /* -------------------the list area*/
-.entries-grid {
+.items-grid {
   grid-row:3 /4;
   background-color:rgba(192, 196, 216, 0.5);
   /*-- nested grid --*/

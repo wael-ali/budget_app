@@ -128,7 +128,9 @@ var UIController = (function(){
   budget:             '.budget',
 
   total_expenses:     '.total_expenses',
-  exp_perc:           '#exp_perc'
+  exp_perc:           '#exp_perc',
+
+  items:               '.items-grid'
  }
 
 
@@ -147,10 +149,10 @@ var UIController = (function(){
 
     UICtrlAddItemTOList: function(obj, type){
       var html, newHtml, expId, incId, element;
-      expId = 'expense-'+obj.id;
-      incId = 'income-'+obj.id;
+      expId = 'exp-'+obj.id;
+      incId = 'inc-'+obj.id;
       // create HTML  string with placeholder text 
-      html = '<div><div class="entry" id="%expense-id%"><span class="description left">%description%</span><span id="value-id" class="right">%value%<span class="percentage">20%</span><button class="dellete-btn">X</button></span></div></div>'
+      html = '<div><div class="entry" id="%expense-id%"><span class="description left">%description%</span><span class="right">%value%<span class="percentage">20%</span><div class="right"><button class="dellete-btn">X</button></div></span></div></div>'
       // replace the placeholder text with actual data
       if (type === 'inc') {
         newHtml = html.replace('%expense-id%', incId);
@@ -209,18 +211,25 @@ var UIController = (function(){
 var controller = (function(budgetCtrl, UICtrl){
 
   var setupEventListeners = function(){
+
+    // getting the selectors from DOM using object variable in user interface controller (module)
     var DOM = UICtrl.getDOMstrings();
 
+      // clicking the button O.K
     document.querySelector(DOM.inputbtn).addEventListener('click', function(){
       ctrlAddItem();
     });
 
+      // Event for the return Key.
     document.addEventListener('keypress', function(event){
       if (event.keyCode === 13 || event.which === 13) {
         event.preventDefault(); // prventing the enter key from also triggering a click event.
         ctrlAddItem();
       }
     });
+
+    // event for deleting an item useing the delegete technick in js.
+    document.querySelector(DOM.items).addEventListener('click', ctrlDelleteItem);
   };
 
   
@@ -238,12 +247,18 @@ var controller = (function(budgetCtrl, UICtrl){
   }
 
 
+
+
+  // adding item methode
   var ctrlAddItem = function(){
+
     var newItem, input;
+
     // get the field input 
     input = UICtrl.getinput();
    
    if (input.description !== "" && !isNaN(input.value) && input.value > 0) { // input values authentication
+
       // add the item to the budget controller
       newItem = budgetCtrl.BudgetCtrlAddItem(input);
 
@@ -256,8 +271,14 @@ var controller = (function(budgetCtrl, UICtrl){
 
     // Calculate and update budget
     updateBudget();
+  };
 
- 
+
+
+  // Delleting Item methode
+  var ctrlDelleteItem = function(event){
+    var itemId;
+    itemId = event.target.parentNode.parentNode.parentNode.id;
   };
 
 
