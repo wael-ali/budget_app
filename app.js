@@ -167,11 +167,14 @@ var UIController = (function(){
     },
 
     UICtrlAddItemTOList: function(obj, type){
+
       var html, newHtml, expId, incId, element;
       expId = 'exp-'+obj.id;
       incId = 'inc-'+obj.id;
+
       // create HTML  string with placeholder text 
       html = '<div><div class="entry" id="%expense-id%"><span class="description left">%description%</span><span class="right">%value%<span class="percentage">20%</span><div class="right"><button class="dellete-btn">X</button></div></span></div></div>'
+
       // replace the placeholder text with actual data
       if (type === 'inc') {
         newHtml = html.replace('%expense-id%', incId);
@@ -181,11 +184,18 @@ var UIController = (function(){
         newHtml = html.replace('%expense-id%', expId);
         element = DOMstrings.expenses_list;
       }
+
       newHtml = newHtml.replace('%description%', obj.description);
       newHtml = newHtml.replace('%value%', obj.value);
       
       // Insert the HTML into the DOM.
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+    },
+
+    delleteListItem: function(selectorID){
+
+        var el = document.getElementById(selectorID);
+        el.parentNode.removeChild(el);
     },
 
     clearFields: function(){
@@ -207,7 +217,7 @@ var UIController = (function(){
       if (obj.percentage > 0) {
         document.querySelector(DOMstrings.exp_perc).textContent  = obj.percentage + '%';
       }else{
-        document.querySelector(DOMstrings.exp_perc).textContent  = '-1';
+        document.querySelector(DOMstrings.exp_perc).textContent  = '---';
       }
       
     },
@@ -307,9 +317,12 @@ var controller = (function(budgetCtrl, UICtrl){
 
       // dellete the item from the data structure (budgetcontroller function)
       budgetCtrl.budgetCtrlDelleteItem(type, ID);
+
       // dellete the item from the user interface
+      UICtrl.delleteListItem(itemId);
 
       // update and show the budget 
+      updateBudget();
     }
   };
 
