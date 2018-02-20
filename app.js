@@ -13,7 +13,7 @@ var budgetController = (function(){
     if (totalIncome > 0) {
       this.percentage = Math.round((this.value / totalIncome) * 100);
     }else{
-      this.percentage = '---';
+      this.percentage = -1;
     }
     
   };
@@ -176,7 +176,8 @@ var UIController = (function(){
   total_expenses:     '.total_expenses',
   exp_perc:           '#exp_perc',
 
-  items:               '.items-grid'
+  items:               '.items-grid',
+  exp_percentage:      '.exp_percentage'
  }
 
 
@@ -209,6 +210,7 @@ var UIController = (function(){
         element = DOMstrings.income_list;
       }else if (type === 'exp') {
         newHtml = html.replace('%expense-id%', expId);
+        newHtml = newHtml.replace('<span class="percentage">20%</span>','<span class="percentage exp_percentage">20%</span>');
         element = DOMstrings.expenses_list;
       }
 
@@ -247,6 +249,28 @@ var UIController = (function(){
         document.querySelector(DOMstrings.exp_perc).textContent  = '---';
       }
       
+    },
+
+    displayPercentages: function(percentages){
+      var percentageNodes = document.querySelectorAll(DOMstrings.exp_percentage);
+
+      // forEach function to loop throuhg the nodelist
+      var nodeListForEach = function(fieldslist, callBackFunction){
+        for (var i = 0; i < fieldslist.length; i++) {
+          callBackFunction(fieldslist[i], i);
+        }
+      };
+      // passing our callbackfunction to our foreach function depending on (function calls a function)
+
+      nodeListForEach(percentageNodes, function(current, index){
+
+        if (percentages[index] > 0) {
+          current.textContent = percentages[index] + '%';
+        }else{
+          current.textContent = '---';
+        }
+        
+      });
     },
   };
 
@@ -313,7 +337,7 @@ var controller = (function(budgetCtrl, UICtrl){
     // read percentages from the budgetcontroller
     var percentages = budgetCtrl.getPercentages();
     // display the percentages
-    console.log(percentages);
+    UICtrl.displayPercentages(percentages);
   };
 
 
