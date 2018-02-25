@@ -177,7 +177,9 @@ var UIController = (function(){
   exp_perc:           '#exp_perc',
 
   items:               '.items-grid',
-  exp_percentage:      '.exp_percentage'
+  exp_percentage:      '.exp_percentage',
+
+  month:              '.month'
  }
 
 
@@ -291,6 +293,15 @@ var UIController = (function(){
         
       });
     },
+
+    displayMonth: function(){
+      var now, year, month, months;
+      now = new Date();
+      year = now.getFullYear();
+      months = ['Januray', 'February', 'March', 'April', 'May', 'June', 'Julay', 'August', 'September', 'October', 'November', 'December'];
+      month = now.getMonth();
+      document.querySelector(DOMstrings.month).textContent = months[month] + ' ' + year;
+    }
   };
 
 
@@ -424,6 +435,7 @@ var controller = (function(budgetCtrl, UICtrl){
   return {
     init: function(){
       setupEventListeners();
+      UICtrl.displayMonth();
     },
     setDOM: function(){
       UICtrl.displayBudget({
@@ -432,7 +444,7 @@ var controller = (function(budgetCtrl, UICtrl){
             totalExp: 0,
             percentage: 0,
           });
-    },
+    }
   }
 })(budgetController, UIController);
 
