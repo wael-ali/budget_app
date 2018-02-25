@@ -130,6 +130,9 @@ body {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+.exp-color {
+  border: 1px solid red;
+}
 
 
 /* -------------------the list area*/

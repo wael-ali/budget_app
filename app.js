@@ -199,6 +199,16 @@ var UIController = (function(){
     return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
   }
 
+  // forEach function to loop throuhg the nodelist
+  var nodeListForEach = function(fieldslist, callBackFunction){
+
+    for (var i = 0; i < fieldslist.length; i++) {
+      callBackFunction(fieldslist[i], i);
+    }
+  };
+
+
+
 
   return {
     getinput: function(){
@@ -275,14 +285,7 @@ var UIController = (function(){
     displayPercentages: function(percentages){
       var percentageNodes = document.querySelectorAll(DOMstrings.exp_percentage);
 
-      // forEach function to loop throuhg the nodelist
-      var nodeListForEach = function(fieldslist, callBackFunction){
-        for (var i = 0; i < fieldslist.length; i++) {
-          callBackFunction(fieldslist[i], i);
-        }
-      };
       // passing our callbackfunction to our foreach function depending on (function calls a function)
-
       nodeListForEach(percentageNodes, function(current, index){
 
         if (percentages[index] > 0) {
@@ -301,6 +304,24 @@ var UIController = (function(){
       months = ['Januray', 'February', 'March', 'April', 'May', 'June', 'Julay', 'August', 'September', 'October', 'November', 'December'];
       month = now.getMonth();
       document.querySelector(DOMstrings.month).textContent = months[month] + ' ' + year;
+    },
+
+    changeInputColor: function(){
+
+      var fields = document.querySelectorAll(// return an Itemlist of nodes we cant use forEach
+          DOMstrings.inputType + ','+
+          DOMstrings.inputDescription + ',' +
+          DOMstrings.inputValue + ',' +
+          DOMstrings.inputbtn
+      );
+
+      nodeListForEach(fields, function(cur){
+        cur.classList.toggle('exp-color');
+      });
+    },
+
+    initializeInputType: function(){
+      document.querySelector(DOMstrings.inputType).value = 'inc';
     }
   };
 
@@ -340,6 +361,9 @@ var controller = (function(budgetCtrl, UICtrl){
 
     // event for deleting an item useing the delegete technick in js.
     document.querySelector(DOM.items).addEventListener('click', ctrlDelleteItem);
+
+    // change the color of the input acording to the input type
+    document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changeInputColor);
   };
 
   
@@ -436,6 +460,7 @@ var controller = (function(budgetCtrl, UICtrl){
     init: function(){
       setupEventListeners();
       UICtrl.displayMonth();
+      UICtrl.initializeInputType();
     },
     setDOM: function(){
       UICtrl.displayBudget({
