@@ -181,6 +181,23 @@ var UIController = (function(){
  }
 
 
+  var formatNumber =  function(num, type) {
+    var numSplit, int, dec;
+    num = Math.abs(num);// get the absulute number 
+    num = num.toFixed(2);// show the number with two desimale numbers 22.00 as string
+
+    numSplit = num.split("."); // array off the integer and the decimal parts
+    int = numSplit[0];
+    if (int.length > 3) {
+      int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3); // input 23520, output 23,520
+    }
+
+    dec = numSplit[1];
+    
+    return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
+  }
+
+
   return {
     getinput: function(){
       return {
@@ -215,7 +232,7 @@ var UIController = (function(){
       }
 
       newHtml = newHtml.replace('%description%', obj.description);
-      newHtml = newHtml.replace('%value%', obj.value);
+      newHtml = newHtml.replace('%value%',formatNumber(obj.value, type));
       
       // Insert the HTML into the DOM.
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
@@ -240,9 +257,11 @@ var UIController = (function(){
     },
 
     displayBudget: function(obj){
-      document.querySelector(DOMstrings.budget).textContent                     = obj.budget;
-      document.querySelector(DOMstrings.total_income).textContent               = obj.totalInc;
-      document.querySelector(DOMstrings.total_expenses).textContent             = obj.totalExp;
+      var type;
+      obj.budget >= 0 ? type = 'inc' : type = 'exp';
+      document.querySelector(DOMstrings.budget).textContent                     = formatNumber(obj.budget, type);
+      document.querySelector(DOMstrings.total_income).textContent               = formatNumber(obj.totalInc, 'inc');
+      document.querySelector(DOMstrings.total_expenses).textContent             = formatNumber(obj.totalExp, 'exp');
       if (obj.percentage > 0) {
         document.querySelector(DOMstrings.exp_perc).textContent  = obj.percentage + '%';
       }else{
