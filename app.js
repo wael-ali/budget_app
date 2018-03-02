@@ -6,20 +6,13 @@ var budgetController = (function(){
     this.id           = id; 
     this.description  = description;
     this.value        = value;
-    this.percentage   = -1;
+    this.percentage   = -1;//calcPercentage(this.value, data.totals.inc);
   }
 
-  Expense.prototype.calcPercentage = function(totalIncome){
-    if (totalIncome > 0) {
-      this.percentage = Math.round((this.value / totalIncome) * 100);
-    }else{
-      this.percentage = -1;
-    }
-    
-  };
 
-  Expense.prototype.getPercentage = function(){
-    return this.percentage;
+
+  var getPercentage = function(exp){
+    return calcPercentage(exp.value, data.totals.inc);
   };
 
   var Income = function(id, description, value){
@@ -49,7 +42,18 @@ var budgetController = (function(){
     data.totals[type] = sum;
   };
 
+  var calcPercentage = function(value,totalIncome){
+    var per;
+    if (totalIncome > 0) {
+      per = Math.round((this.value / totalIncome) * 100);
+    }else{
+      per = -1;
+    }
+    return per;
+  };
+
   // Private objects !....
+
   var data = {
     allItems: {
       exp: [],
@@ -62,6 +66,11 @@ var budgetController = (function(){
     budget: 0,
     percentage: -1,
   }
+  // check if there is localStorage
+  data = localStorage.getItem('sdata') ? JSON.parse(localStorage.getItem('sdata')) : data;
+  
+
+
 
 
 
@@ -123,15 +132,17 @@ var budgetController = (function(){
       }
     },
 
-    calculatePercentage: function(){
-      data.allItems.exp.map(function(cur){
-        cur.calcPercentage(data.totals.inc);
+    calculatePercentage: function(dataObj){
+      dataObj.allItems.exp.map(function(cur){
+        calcPercentage(cur.value, data.totals.inc);
       });
     },
 
-    getPercentages: function(){
+
+
+    getPercentages: function(data){
       var allPerc = data.allItems.exp.map(function(cur){
-        return cur.getPercentage();
+        return getPercentage(cur);
       });
       return allPerc;
     },
@@ -144,9 +155,14 @@ var budgetController = (function(){
         percentage: data.percentage,
       }
     },
-    testing: function(){
-      console.log(data);
-    }
+
+    setLocalStorage: function(){
+      
+      localStorage.setItem('sdata', JSON.stringify(data));
+    },
+    getData: function(){
+      return data;
+    },
   }
 
 
@@ -179,7 +195,8 @@ var UIController = (function(){
   items:               '.items-grid',
   exp_percentage:      '.exp_percentage',
 
-  month:              '.month'
+  month:              '.month',
+  saveDataLocaly:     '.save'
  }
 
 
@@ -364,6 +381,9 @@ var controller = (function(budgetCtrl, UICtrl){
 
     // change the color of the input acording to the input type
     document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changeInputColor);
+
+    // save data localy
+    document.querySelector(DOM.saveDataLocaly).addEventListener('click', budgetCtrl.setLocalStorage);
   };
 
   
@@ -386,10 +406,10 @@ var controller = (function(budgetCtrl, UICtrl){
   var updatePercentages = function(){
 
     // calculate perdentages
-    budgetCtrl.calculatePercentage();
+    budgetCtrl.calculatePercentage(budgetCtrl.getData());
 
     // read percentages from the budgetcontroller
-    var percentages = budgetCtrl.getPercentages();
+    var percentages = budgetCtrl.getPercentages(budgetCtrl.getData());
     // display the percentages
     UICtrl.displayPercentages(percentages);
   };
@@ -463,12 +483,20 @@ var controller = (function(budgetCtrl, UICtrl){
       UICtrl.initializeInputType();
     },
     setDOM: function(){
-      UICtrl.displayBudget({
-            budget: 0,
-            totalInc: 0,
-            totalExp: 0,
-            percentage: 0,
-          });
+
+      UICtrl.displayBudget(budgetCtrl.getBudget());
+
+      var storedData = budgetCtrl.getData();
+
+      storedData.allItems.inc.forEach(function(inc) {
+        UICtrl.UICtrlAddItemTOList(inc, 'inc');
+      })
+
+      storedData.allItems.exp.forEach(function(exp) {
+        UICtrl.UICtrlAddItemTOList(exp, 'exp');
+        updatePercentages();
+      })
+      
     }
   }
 })(budgetController, UIController);
